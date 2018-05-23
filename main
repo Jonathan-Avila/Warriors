@@ -1,0 +1,83 @@
+int main() {
+	
+	string classType;
+	string object;
+	string HorF;
+	string nobleName;
+	string nobleName1;
+	string nobleName2;
+
+
+	vector<Noble*>nobleList;
+	vector<Warrior>warriorList;
+	ifstream NobleWarriors("NobleWarriors.txt");
+
+		if (!NobleWarriors) {
+			cout << "Wrong File opened!" << endl;
+		}
+
+	while (NobleWarriors >> classType >> object) {
+		if (classType == "Noble") {
+			new Noble object(NobleWarriors);
+			nobleList.push_back(&object);
+		}
+		else if (classType == "Warrior") {
+			new Warrior object;
+			warriorList.push_back(&object);
+		}
+	}
+	while (NobleWarriors >> HorF >> noblename >> warriorName) {
+		if (HorF == "Hire") {
+			noblename.hire(warriorName);
+		}
+		else if (HorF == "Fire") {
+			noblename.fire(warriorName);
+		}
+	}
+
+	while (NobleWarriors >> object >> nobleName1 >> nobleName2) {
+		if (object == "battle") {
+			nobleName1.battle(nobleName2);
+		}
+		else if (object == " clear") {
+			for (size_t i = 0; i < nobleArmy.size(); i++) {}
+		}
+	}
+	Noble art("King Arthur");
+	Noble lance("Lancelot du Lac");
+	Noble jim("Jim");
+	Noble linus("Linus Torvalds");
+	Noble billie("Bill Gates");
+
+	Warrior cheetah("Tarzan", 10);
+	Warrior wizard("Merlin", 15);
+	Warrior theGovernator("Conan", 12);
+	Warrior nimoy("Spock", 15);
+	Warrior lawless("Xena", 20);
+	Warrior mrGreen("Hulk", 8);
+	Warrior dylan("Hercules", 3);
+
+	jim.hire(nimoy);
+	lance.hire(theGovernator);
+	art.hire(wizard);
+	lance.hire(dylan);
+	linus.hire(lawless);
+	billie.hire(mrGreen);
+	art.hire(cheetah);
+
+	jim.display();
+	lance.display();
+	art.display();
+	linus.display();
+	billie.display();
+
+	art.fire(cheetah);
+	art.display();
+
+	art.battle(lance);
+	jim.battle(lance);
+	linus.battle(billie);
+	billie.battle(lance);
+
+	return 0;
+}

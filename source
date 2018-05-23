@@ -1,0 +1,121 @@
+/*
+Jonathan Avila
+Classes and Association
+A Game Modeling Medieval Nobles and Warriors
+*/
+
+#include<iostream>
+#include<vector>
+#include<string>
+#include<fstream>
+
+using namespace std;
+
+class Warrior {//Warrior class with constructor containing name and strength
+	string name;
+	double strength;
+	bool isHired;
+public:
+	Warrior(const string& name, const double& strength) : name(name), strength(strength), isHired(false) {}
+	double getStrength() const { return strength; }
+	void setStrength(double& ratio) {
+		strength = strength * ratio;
+	}
+	void setHired() {
+		if (isHired == true) {
+			isHired = false;
+		}
+		else {
+			isHired = true;
+		}
+	}
+
+	bool checkHired() {
+		return isHired;
+	}
+	string getName() const { return name; }
+
+};
+
+class Noble {// Noble class with constuctor containing only a name
+	string name;
+	vector<Warrior*>nobleArmy;
+public:
+	Noble(const string& name) : name(name) {}
+	string getName() const { return name; }
+
+	void hire(Warrior& aWarrior) {
+		if (aWarrior.checkHired() == false) {
+			nobleArmy.push_back(&aWarrior);
+			aWarrior.setHired();
+		}
+	}
+	void fire(Warrior& aWarrior) {
+		for (size_t i = 0; i < nobleArmy.size(); i++) {
+			if (nobleArmy[i]->getName() == aWarrior.getName()) {
+				nobleArmy[i] = nobleArmy[nobleArmy.size() - 1];
+				nobleArmy.pop_back();
+				aWarrior.setHired();
+				return;
+			}
+		}
+		cout << aWarrior.getName() << ", you're fired! -- " << getName() << endl;
+	}
+	void display() {
+		cout << name << " has an army of " << nobleArmy.size() << endl;
+		for (size_t i = 0; i < nobleArmy.size(); i++) {
+			cout << "	" << nobleArmy[i]->getName() << " : " << nobleArmy[i]->getStrength() << endl;
+
+		}
+	}
+
+	void battle(Noble& noble2) {
+		cout << getName() << " battles " << noble2.getName() << endl;
+		double ratio;
+		double zero = 0;
+		double noble1Strength = 0;
+		double noble2Strength = 0;
+		for (size_t i = 0; i < nobleArmy.size(); i++) {
+			noble1Strength += nobleArmy[i]->getStrength();
+		}
+		for (size_t j = 0; j < noble2.nobleArmy.size(); j++) {
+			noble2Strength += noble2.nobleArmy[j]->getStrength();
+		}
+		if (noble1Strength > noble2Strength && noble2Strength != 0) {
+			ratio = (1 - (noble2Strength / noble1Strength));
+			for (size_t i = 0; i < nobleArmy.size(); i++) {
+				nobleArmy[i]->setStrength(ratio);
+			}
+
+			for (size_t j = 0; j < noble2.nobleArmy.size(); j++) {
+				noble2.nobleArmy[j]->setStrength(zero);
+			}
+			cout << getName() << " defeats " << noble2.getName() << endl;
+		}
+		if (noble2Strength > noble1Strength && noble1Strength != 0) {
+			ratio = (1 - (noble1Strength / noble2Strength));
+			for (size_t j = 0; j < noble2.nobleArmy.size(); j++) {
+				noble2.nobleArmy[j]->setStrength(ratio);
+			}
+			for (size_t i = 0; i < nobleArmy.size(); i++) {
+				nobleArmy[i]->setStrength(zero);
+			}
+			cout << noble2.getName() << " defeats " << getName() << endl;
+		}
+		if (noble2Strength == zero && noble1Strength != zero) {
+			cout << "He's dead " << getName() << endl;
+		}
+		if (noble1Strength == zero && noble2Strength == zero) {
+			cout << "Oh, NO!  They're both dead!  Yuck!" << endl;
+		}
+		if (noble1Strength == noble2Strength && noble1Strength != 0) {
+			for (size_t i = 0; i < nobleArmy.size(); i++) {
+				nobleArmy[i]->setStrength(zero);
+			}
+			for (size_t j = 0; j < noble2.nobleArmy.size(); j++) {
+				noble2.nobleArmy[j]->setStrength(zero);
+			}
+			cout << "Mutual Annihalation : " << getName() << " and " << noble2.getName() << " die at each other's hands" << endl;
+		}
+	}
+};
